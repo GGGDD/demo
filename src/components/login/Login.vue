@@ -1,5 +1,7 @@
 <template>
-  <div>LOGIN</div>
+  <div>LOGIN
+     <el-button type="primary">主要按钮</el-button>
+  </div>
 </template>
 
 <script>

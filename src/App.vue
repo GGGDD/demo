@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    跟组建
     <!-- 路由出口 放在这里 -->
     <router-view></router-view>
   </div>

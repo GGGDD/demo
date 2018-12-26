@@ -7,6 +7,11 @@ import App from './App'
 // (抽离 路由模块 , 路由是独立的,而不是应该放在入口中  ,所以抽离出来 变为独立的模块 , 模块需要什么就要手动导入)
 import router from './router'
 
+// 使用 elementUi
+import ElementUI from 'element-ui'
+import 'element-ui/lib/theme-chalk/index.css'
+Vue.use(ElementUI)
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
