@@ -10,6 +10,8 @@ import router from './router'
 // 使用 elementUi
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// 导入 html,body的css样式
+import '@/assets/css/index.css'
 Vue.use(ElementUI)
 
 Vue.config.productionTip = false

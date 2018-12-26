@@ -9,20 +9,27 @@ label:标签文本,每一行 表单的说明文本 , name ... user
 prop:表单域model 字段,在使用 validate(表单验证)、resetFields(重置表单) 方法的情况下，该属性是必填的
 通过设置 label-position 属性可以改变表单域标签的位置
 -->
+<div class="login">
+<el-row :gutter="10" type="flex"  justify="center" align='middle' class="login-row">
+  <el-col :xs="14" :sm="12" :md="10" :lg="8" :xl="6">
+  <el-form :model="loginForm " :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm login-form" label-position="top">
+    <el-form-item label="用户名" prop="username">
+      <el-input v-model="loginForm.username"></el-input>
+    </el-form-item>
+    <el-form-item label="密码" prop="password">
+      <el-input v-model="loginForm.password" type='password'></el-input>
+    </el-form-item>
 
-  <el-form :model="loginForm " :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm" label-position="top">
-  <el-form-item label="用户名" prop="username">
-    <el-input v-model="loginForm.username"></el-input>
-  </el-form-item>
-  <el-form-item label="密码" prop="password">
-    <el-input v-model="loginForm.password" type='password'></el-input>
-  </el-form-item>
+    <el-form-item>
+      <el-button type="primary" @click="submitForm('ruleForm')">登陆</el-button>
+      <el-button @click="resetForm('ruleForm')">重置</el-button>
+    </el-form-item>
+  </el-form>
+  </el-col>
 
-  <el-form-item>
-    <el-button type="primary" @click="submitForm('ruleForm')">登陆</el-button>
-    <el-button @click="resetForm('ruleForm')">重置</el-button>
-  </el-form-item>
-</el-form>
+</el-row>
+</div>
+
 </template>
 
 <script>
@@ -102,5 +109,19 @@ export default {
 </script>
 
 <style>
+  .login {
+    width: 100%;
+    height: 100%;
+    background: skyblue;
+    position: relative;
+  }
+  .login-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius:10px;
+  }
+  .login-row {
+    height: 100%;
+  }
 
 </style>

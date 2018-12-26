@@ -24,7 +24,7 @@ const router = new Router({
 // 导航守卫  在index.js 路由中 添加导航守卫
 // 只要是路由, 都会走导航守卫
 router.beforeEach((to, from, next) => {
-  if (to.path === 'login') {
+  if (to.path === '/login') {
     return next()
   }
   // 判断 有没有登陆 , localstorage中有没有 token值,
