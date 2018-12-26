@@ -26,6 +26,7 @@ prop:表单域model 字段,在使用 validate(表单验证)、resetFields(重置
 </template>
 
 <script>
+
 // 要发送请求 , 导入axios
 import axios from 'axios'
 export default {
@@ -69,6 +70,9 @@ export default {
           .then(res => {
             console.log(res)
             if (res.data.meta.status === 200) {
+              // 一旦登陆成功 , 就把token存储在localstarage中
+              // token身份令牌
+              localStorage.setItem('token', res.data.data.token)
               // 之前通过router-link组件标签,点击之后 跳转
               // 跳转到后台首页 , 编程式导航 , 使用js代码来完成 , 路由的跳转
               // push的参数 '/home'  就是 要跳转到的页面路径 ,  与配置的路由规则

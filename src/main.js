@@ -12,8 +12,6 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 
-// 之前通过router-link组件标签,点击之后 跳转
-// 跳转到后台首页 , 编程式导航 , 使用js代码来完成 , 路由的跳转
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */

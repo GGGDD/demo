@@ -15,9 +15,25 @@ Vue.use(Router)
 // 出口 放在 App.vue根组建中
 const router = new Router({
   routes: [
+    {path: '/', redirect: '/login'},
     {path: '/login', component: Login},
     {path: '/home', component: Home}
   ]
+})
+
+// 导航守卫  在index.js 路由中 添加导航守卫
+// 只要是路由, 都会走导航守卫
+router.beforeEach((to, from, next) => {
+  if (to.path === 'login') {
+    return next()
+  }
+  // 判断 有没有登陆 , localstorage中有没有 token值,
+  const token = localStorage.getItem('token')
+  if (token) {
+    next()
+  } else {
+    next('/login')
+  }
 })
 
 // 把路由导出
