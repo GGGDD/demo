@@ -1,0 +1,65 @@
+<div>
+    <el-table
+    :data="rolseTableData"
+    style="width: 100%">
+    <el-table-column
+    type="index"
+    :index="indexMethod">
+  </el-table-column>
+    <el-table-column type="expand">
+      <template slot-scope="scope">
+
+          <el-row v-for='item in scope.row.children' :key='item.id' class="roles-item">
+            <el-col :span="5">
+                <el-tag
+                closable
+                type="">
+                {{item.authName}}
+              </el-tag>
+              <i class="el-icon-arrow-right"></i>
+            </el-col>
+
+            <el-col :span="19">
+                <el-row  v-for='item2 in item.children' :key='item2.id'>
+                    <el-col :span='5'>
+                        <el-tag
+                        closable
+                        type="success">
+                        {{item2.authName}}
+                      </el-tag> <i class="el-icon-arrow-right"></i>
+                    </el-col>
+                    <el-col :span='19'>
+                      <span  v-for='item3 in item2.children' :key='item3.id' class="roles-span">
+                          <el-tag
+                          closable
+                          type="warning">
+                          {{item3.authName}}
+                        </el-tag>
+                      </span>
+                    </el-col>
+
+                </el-row>
+            </el-col>
+
+          </el-row>
+      </template>
+    </el-table-column>
+    <el-table-column
+      label="角色名称"
+      prop="roleName">
+    </el-table-column>
+    <el-table-column
+      label="角色描述"
+      prop="roleDesc">
+    </el-table-column>
+    <el-table-column
+      label="层级"
+      prop="desc">
+      <template slot-scope='scope'>
+          <el-button size="mini" type="primary" plain icon="el-icon-edit"></el-button>
+          <el-button size="mini" type="warning" plain icon="el-icon-delete"></el-button>
+          <el-button size="mini" type="success" plain icon="el-icon-check"  >分配权限</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+</div>
