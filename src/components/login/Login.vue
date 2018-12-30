@@ -35,7 +35,6 @@ prop:表单域model 字段,在使用 validate(表单验证)、resetFields(重置
 <script>
 
 // 要发送请求 , 导入axios
-import axios from 'axios'
 export default {
   data () {
     return {
@@ -61,45 +60,41 @@ export default {
     }
   },
   methods: {
-    submitForm (formName) {
+    async submitForm (formName) {
       // $refs在 Vue中来直接获取组件中或者DOM对象
       // this.$refs.ruleForm就是页面中的el-form表单组件
       // 收集到 页面的res,是个集合
-      this.$refs.ruleForm.validate((valid) => {
-        if (!valid) {
-          return false
-        }
+      try {
+        await this.$refs.ruleForm.validate()
+
         // 下面代码 表示验证成功
         // 双向数据绑定 , 所以 , this.loginForm就是 表单输入的数据
         // console.log(this.loginForm)
 
-        axios.post(`http://localhost:8888/api/private/v1/login`, this.loginForm)
-          .then(res => {
-            console.log(res)
-            if (res.data.meta.status === 200) {
-              // 一旦登陆成功 , 就把token存储在localstarage中
-              // token身份令牌
-              localStorage.setItem('token', res.data.data.token)
-              // 之前通过router-link组件标签,点击之后 跳转
-              // 跳转到后台首页 , 编程式导航 , 使用js代码来完成 , 路由的跳转
-              // push的参数 '/home'  就是 要跳转到的页面路径 ,  与配置的路由规则
-              this.$router.push('/home')
+        const res = await this.$http.post(`http://localhost:8888/api/private/v1/login`, this.loginForm)
+        if (res.data.meta.status === 200) {
+        // 一旦登陆成功 , 就把token存储在localstarage中
+        // token身份令牌
+          localStorage.setItem('token', res.data.data.token)
+          // 之前通过router-link组件标签,点击之后 跳转
+          // 跳转到后台首页 , 编程式导航 , 使用js代码来完成 , 路由的跳转
+          // push的参数 '/home'  就是 要跳转到的页面路径 ,  与配置的路由规则
+          this.$router.push('/home')
 
-              // 消息 message
-              this.$message({
-                message: res.data.meta.msg,
-                type: 'success'
-              })
-            } else {
-              this.$message({
-                message: res.data.meta.msg,
-                type: 'error',
-                // 显示 时间
-                duration: 3500
-              })
-            }
+          // 消息 message
+          this.$message({
+            message: res.data.meta.msg,
+            type: 'success'
           })
-      })
+        } else {
+          this.$message({
+            message: res.data.meta.msg,
+            type: 'error',
+            // 显示 时间
+            duration: 3500
+          })
+        }
+      } catch (e) {}
     },
     resetForm (formName) {
       this.$refs[formName].resetFields()

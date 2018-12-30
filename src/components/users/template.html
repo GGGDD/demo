@@ -1,0 +1,149 @@
+<div>
+  <!-- 面包屑导航 -->
+  <el-breadcrumb separator-class="el-icon-arrow-right"
+  class="users-bread">
+    <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+    <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+    <el-breadcrumb-item>用户列表</el-breadcrumb-item>
+  </el-breadcrumb>
+  <!-- input搜索框 -->
+  <el-row :gutter="20" class="users-select">
+      <el-col :span='15'>
+          <el-input placeholder="请输入内容" v-model="searchText" class="input-with-select ">
+              <el-button slot="append" icon="el-icon-search" @click='searc'></el-button>
+            </el-input>
+      </el-col>
+      <el-col :span='4'>
+        <!-- 添加用户按钮 -->
+        <el-button type="success" plain @click="showDialogAddUser">添加用户</el-button>
+      </el-col>
+  </el-row>
+  <!-- 搜索框 -->
+
+  <!--
+  el-table:  表格组件
+  data:显示的数据
+  prop:对应列内容的字段名
+  label:显示的标题
+-->
+<el-table
+:data="userList"
+style="width: 100%">
+<el-table-column
+  prop='username'
+  label="姓名"
+  width="180">
+</el-table-column>
+<el-table-column
+  prop="email"
+  label="邮箱"
+  width="180">
+</el-table-column>
+<el-table-column
+  prop="mobile"
+  label="电话">
+</el-table-column>
+<el-table-column
+  label="用户状态"
+  width="180">
+  <!-- switch开关 -->
+  <!-- 必须 放在 自定义列中 , 否则不显示 -->
+  <template slot-scope="scope">
+    <!-- scope.row就是每一行的状态 的数据 -->
+    <el-switch
+      v-model="scope.row.mg_state"
+      active-color="#13ce66"
+      inactive-color="#ff4949"
+      @change='switchChange(scope.row)'>
+    </el-switch>
+  </template>
+</el-table-column>
+<!-- 自定义列中 , 不需要有prop -->
+<el-table-column
+  label="操作">
+  <!-- 自定义模板列 -->
+  <template slot-scope="scope">
+    <!-- 修改 -->
+      <el-button size="mini" type="primary" plain icon="el-icon-edit" @click='updateshow(scope.row)'></el-button>
+      <el-button size="mini" type="warning" plain icon="el-icon-delete" @click='userDel(scope.row)'></el-button>
+      <el-button size="mini" type="success" plain icon="el-icon-check"  @click='roleDel()'>分配角色</el-button>
+  </template>
+</el-table-column>
+
+</el-table>
+
+<!-- 分页组件 -->
+<!-- page-size:每页显示条目个数 -->
+<!-- total:总条目数 -->
+<!-- current-page:当前页数 -->
+<el-pagination
+  background
+  layout="prev, pager, next"
+  :total="total"
+  :page-size='pagesize'
+  :current-page='pagenum'
+  @current-change='pageChange'
+  >
+</el-pagination>
+
+<!-- 添加用户 对话框 -->
+<!-- 给对话框 添加一个关闭的回调函数 -->
+<el-dialog title="收货地址" :visible.sync="dialogFormVisible" @close='addUserClose'>
+  <!-- :rules="rules"  添加 表单校验规则 -->
+  <!-- prop  表单校验字段 -->
+  <el-form :model="userAddForm" :rules="rules" ref="userAddForm">
+    <el-form-item label="用户" label-width="80px" prop="username">
+      <el-input v-model="userAddForm.username" ></el-input>
+    </el-form-item>
+    <el-form-item label="密码" label-width="80px" prop="password">
+      <el-input v-model="userAddForm.password" type='password'></el-input>
+    </el-form-item>
+    <el-form-item label="邮箱" label-width="80px" prop="email">
+      <el-input v-model="userAddForm.email" ></el-input>
+    </el-form-item>
+    <el-form-item label="手机" label-width="80px" prop="mobile">
+      <el-input v-model="userAddForm.mobile" ></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="dialogFormVisible = false">取 消</el-button>
+    <el-button type="primary" @click="submitForm('ruleForm')">确 定</el-button>
+  </div>
+</el-dialog>
+
+<!-- 编辑用户 弹出框 -->
+<el-dialog title="收货地址" :visible.sync="updatedialogForm">
+  <el-form :model="updateUserForm">
+    <el-form-item label="用户名" label-width="80px">
+        <el-tag type="info">{{updateUserForm.username}}</el-tag>
+    </el-form-item>
+    <el-form-item label="邮箱" label-width="80px">
+      <el-input v-model="updateUserForm.email" autocomplete="off"></el-input>
+    </el-form-item>
+    <el-form-item label="手机" label-width="80px">
+      <el-input v-model="updateUserForm.mobile" autocomplete="off"></el-input>
+    </el-form-item>
+  </el-form>
+  <div slot="footer" class="dialog-footer">
+    <el-button @click="updatedialogForm = false">取 消</el-button>
+    <el-button type="primary" @click='confirmUpdatedialog' >确 定</el-button>
+  </div>
+</el-dialog>
+
+<!-- 分配角色 弹出框 -->
+<el-dialog title="收货地址" :visible.sync="roledialogForm">
+    <el-form :model="updateUserForm">
+      <el-form-item label="用户名" label-width="80px">
+          <el-tag type="info">{{updateUserForm.username}}</el-tag>
+      </el-form-item>
+
+      <el-form-item label="角色列表" label-width="80px">
+      </el-form-item>
+
+    </el-form>
+    <div slot="footer" class="dialog-footer">
+      <el-button @click="roledialogForm = false">取 消</el-button>
+      <el-button type="primary" @click="roledialogForm = false">确 定</el-button>
+    </div>
+  </el-dialog>
+</div>

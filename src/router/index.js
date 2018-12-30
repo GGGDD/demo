@@ -6,6 +6,9 @@ import Router from 'vue-router'
 // 文件名是小写的 , 但是组件名是大写的
 import Login from '@/components/login/Login.vue'
 import Home from '@/components/home/Home.vue'
+import Users from '@/components/users/Users.vue'
+import Roles from '@/components/roles/Roles.vue'
+import Rights from '@/components/rights/Rights.vue'
 
 // 2.1 将路由 通过use注册到Vue
 // (模块化 工程使用 , 必须要Vue.use()安装一下路由)
@@ -15,9 +18,15 @@ Vue.use(Router)
 // 出口 放在 App.vue根组建中
 const router = new Router({
   routes: [
-    {path: '/', redirect: '/login'},
+    {path: '/', redirect: '/home'},
     {path: '/login', component: Login},
-    {path: '/home', component: Home}
+    {path: '/home',
+      component: Home,
+      children: [
+        {path: '/users', component: Users},
+        {path: '/roles', component: Roles},
+        {path: '/rights', component: Rights}
+      ]}
   ]
 })
 
